@@ -1,0 +1,8 @@
+---
+deployment:
+  tasks:
+    - export APPPATH=/home9/toolkitl/toolkitly
+    - export PUBLICPATH=/home9/toolkitl/public_html
+    - /bin/mkdir -p $APPPATH
+    - /bin/rsync -a --delete --exclude='.git' ./ $APPPATH
+    - /bin/rsync -a --delete $APPPATH/public/ $PUBLICPATH
