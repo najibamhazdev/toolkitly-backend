@@ -17,7 +17,7 @@ class PdfToolsTest extends TestCase
 
     public function test_pdf_tool_pages_load_and_old_urls_redirect(): void
     {
-        foreach (['split-pdf', 'pdf-to-jpg', 'jpg-to-pdf', 'remove-pdf-pages'] as $tool) {
+        foreach (['split-pdf', 'pdf-to-jpg', 'jpg-to-pdf', 'remove-pdf-pages', 'compress-pdf', 'rotate-pdf', 'protect-pdf', 'unlock-pdf'] as $tool) {
             $this->get("/pdf/{$tool}")
                 ->assertOk()
                 ->assertSee("/api/tools/pdf/{$tool}", false);
@@ -47,6 +47,16 @@ class PdfToolsTest extends TestCase
         $this->getJson('/api/tools/pdf/remove-pdf-pages')
             ->assertOk()
             ->assertJsonPath('defaults.pages', '1')
+            ->assertJsonPath('exports.0', 'pdf');
+
+        $this->getJson('/api/tools/pdf/compress-pdf')
+            ->assertOk()
+            ->assertJsonPath('defaults.quality', 'ebook')
+            ->assertJsonPath('exports.0', 'pdf');
+
+        $this->getJson('/api/tools/pdf/rotate-pdf')
+            ->assertOk()
+            ->assertJsonPath('defaults.angle', 90)
             ->assertJsonPath('exports.0', 'pdf');
     }
 
@@ -107,6 +117,21 @@ class PdfToolsTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonPath('file.filename', 'toolkitly-pdf-pages.zip')
+            ->assertJsonStructure(['file' => ['download_url', 'expires_at', 'filename', 'size']]);
+
+        $this->assertGreaterThan(0, $response->json('file.size'));
+    }
+
+    public function test_compress_pdf_returns_pdf_download(): void
+    {
+        $response = $this->postJson('/api/tools/pdf/compress-pdf/process', [
+            'file' => $this->pdfUpload('pages.pdf', ['One']),
+            'compression' => 'screen',
+        ]);
+
+        $response
+            ->assertOk()
+            ->assertJsonPath('file.filename', 'toolkitly-compressed.pdf')
             ->assertJsonStructure(['file' => ['download_url', 'expires_at', 'filename', 'size']]);
 
         $this->assertGreaterThan(0, $response->json('file.size'));

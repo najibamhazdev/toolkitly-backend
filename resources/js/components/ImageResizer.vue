@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onMounted, reactive, ref } from 'vue';
+import { recordToolEvent } from '../analytics';
 
 const props = defineProps({
     metadataUrl: {
@@ -211,6 +212,7 @@ async function resizeImage() {
         outputSize.value = blob.size;
         sourceDimensions.value = `${image.naturalWidth}x${image.naturalHeight}`;
         setStatus('Resized image ready.');
+        recordToolEvent('image-resizer', 'generated', { format: settings.format, mode: settings.preset });
     } catch (error) {
         setStatus(error.message || 'This image could not be resized.');
     } finally {
@@ -313,7 +315,7 @@ onMounted(loadMetadata);
                 </div>
 
                 <div class="mt-4 grid gap-4">
-                    <div class="grid grid-cols-2 gap-3">
+                    <div class="grid sm:grid-cols-2 gap-3">
                         <label class="grid gap-2" for="image-width">
                             <span class="text-sm font-medium text-[#2d2923]">Width</span>
                             <input id="image-width" v-model="settings.width" type="number" min="1" max="8000" class="h-11 rounded-lg border border-[#cdd8d2] bg-white px-3 text-sm text-[#171411] outline-none transition focus:border-[#2f7c67] focus:ring-4 focus:ring-[#2f7c67]/15" @input="settings.preset = 'Custom'; revokeOutput()">
@@ -332,7 +334,7 @@ onMounted(loadMetadata);
                         </select>
                     </label>
 
-                    <div class="grid grid-cols-2 gap-3">
+                    <div class="grid sm:grid-cols-2 gap-3">
                         <label class="grid gap-2" for="image-format">
                             <span class="text-sm font-medium text-[#2d2923]">Format</span>
                             <select id="image-format" v-model="settings.format" class="h-11 rounded-lg border border-[#cdd8d2] bg-white px-3 text-sm text-[#171411] outline-none transition focus:border-[#2f7c67] focus:ring-4 focus:ring-[#2f7c67]/15" @change="revokeOutput">

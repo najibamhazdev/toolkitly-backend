@@ -29,11 +29,14 @@ class PdfToolController extends Controller
         $maxUploadKb = (int) config('toolkitly.max_upload_kb', 10240);
 
         $data = match ($tool) {
-            'split-pdf', 'pdf-to-jpg', 'remove-pdf-pages' => $request->validate([
+            'split-pdf', 'pdf-to-jpg', 'remove-pdf-pages', 'compress-pdf', 'rotate-pdf', 'protect-pdf', 'unlock-pdf' => $request->validate([
                 'file' => ['required', 'file', 'mimetypes:application/pdf', 'max:'.$maxUploadKb],
                 'pages' => ['sometimes', 'string', 'max:120'],
                 'resolution' => ['sometimes', 'integer', 'min:72', 'max:300'],
                 'quality' => ['sometimes', 'integer', 'min:40', 'max:100'],
+                'compression' => ['sometimes', 'string', 'in:screen,ebook,printer,prepress'],
+                'angle' => ['sometimes', 'integer', 'in:90,180,270'],
+                'password' => ['sometimes', 'string', 'min:1', 'max:120'],
             ]),
             'jpg-to-pdf' => $request->validate([
                 'files' => ['required', 'array', 'min:1', 'max:20'],
@@ -47,6 +50,10 @@ class PdfToolController extends Controller
                 'pdf-to-jpg' => $this->pdfs->pdfToJpg($data['file'], (int) ($data['resolution'] ?? 150), (int) ($data['quality'] ?? 90)),
                 'jpg-to-pdf' => $this->pdfs->jpgToPdf($data['files']),
                 'remove-pdf-pages' => $this->pdfs->removePages($data['file'], $data['pages'] ?? '1'),
+                'compress-pdf' => $this->pdfs->compress($data['file'], $data['compression'] ?? 'ebook'),
+                'rotate-pdf' => $this->pdfs->rotate($data['file'], (int) ($data['angle'] ?? 90)),
+                'protect-pdf' => $this->pdfs->protect($data['file'], $data['password'] ?? ''),
+                'unlock-pdf' => $this->pdfs->unlock($data['file'], $data['password'] ?? ''),
             };
         } catch (Throwable $exception) {
             throw ValidationException::withMessages([
@@ -83,6 +90,6 @@ class PdfToolController extends Controller
 
     private function isSupportedTool(string $tool): bool
     {
-        return in_array($tool, ['split-pdf', 'pdf-to-jpg', 'jpg-to-pdf', 'remove-pdf-pages'], true);
+        return in_array($tool, ['split-pdf', 'pdf-to-jpg', 'jpg-to-pdf', 'remove-pdf-pages', 'compress-pdf', 'rotate-pdf', 'protect-pdf', 'unlock-pdf'], true);
     }
 }

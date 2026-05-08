@@ -1,6 +1,7 @@
 <script setup>
 import bwipjs from 'bwip-js';
 import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue';
+import { recordToolEvent } from '../analytics';
 
 const props = defineProps({
     metadataUrl: {
@@ -131,6 +132,7 @@ function downloadPng() {
 
     download(canvas.value.toDataURL('image/png'), 'png');
     setStatus('PNG downloaded.');
+    recordToolEvent('barcode-generator', 'download', { format: 'png', type: form.type });
 }
 
 function downloadSvg() {
@@ -146,6 +148,7 @@ function downloadSvg() {
         download(url, 'svg');
         URL.revokeObjectURL(url);
         setStatus('SVG downloaded.');
+        recordToolEvent('barcode-generator', 'download', { format: 'svg', type: form.type });
     } catch (error) {
         setStatus(error.message || 'The SVG could not be created.');
     }
@@ -173,6 +176,7 @@ async function copyImage() {
                 new ClipboardItem({ [blob.type]: blob }),
             ]);
             setStatus('Barcode image copied.');
+            recordToolEvent('barcode-generator', 'copy', { format: 'png', type: form.type });
         } catch (error) {
             setStatus(error.message || 'The image could not be copied.');
         }
@@ -294,14 +298,14 @@ onMounted(async () => {
                     <canvas ref="canvas" class="max-w-full"></canvas>
                 </div>
 
-                <div class="mt-4 grid grid-cols-2 gap-3">
+                <div class="mt-4 grid sm:grid-cols-2 gap-3">
                     <button type="button" class="rounded-lg bg-[#101820] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#26313b] focus:outline-none focus:ring-4 focus:ring-[#101820]/20" @click="downloadPng">
                         PNG
                     </button>
                     <button type="button" class="rounded-lg border border-[#c6d4cd] px-4 py-3 text-sm font-semibold text-[#171411] transition hover:border-[#6d8d80] hover:bg-[#f4f7f5] focus:outline-none focus:ring-4 focus:ring-[#101820]/10" @click="downloadSvg">
                         SVG
                     </button>
-                    <button type="button" class="col-span-2 rounded-lg border border-[#c6d4cd] px-4 py-3 text-sm font-semibold text-[#171411] transition hover:border-[#6d8d80] hover:bg-[#f4f7f5] focus:outline-none focus:ring-4 focus:ring-[#101820]/10" @click="copyImage">
+                    <button type="button" class="sm:col-span-2 rounded-lg border border-[#c6d4cd] px-4 py-3 text-sm font-semibold text-[#171411] transition hover:border-[#6d8d80] hover:bg-[#f4f7f5] focus:outline-none focus:ring-4 focus:ring-[#101820]/10" @click="copyImage">
                         Copy image
                     </button>
                 </div>

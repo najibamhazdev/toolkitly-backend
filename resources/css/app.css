@@ -9,3 +9,91 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+html,
+body {
+    max-width: 100%;
+    overflow-x: clip;
+}
+
+button,
+input,
+select,
+textarea {
+    max-width: 100%;
+}
+
+.toolkitly-nav {
+    width: 100%;
+}
+
+.toolkitly-nav:not(.hidden) {
+    display: grid;
+}
+
+.toolkitly-nav summary::-webkit-details-marker {
+    display: none;
+}
+
+.toolkitly-nav > details {
+    width: 100%;
+}
+
+.toolkitly-nav > details > summary {
+    width: 100%;
+}
+
+.toolkitly-menu-panel {
+    position: static;
+    width: 100%;
+    z-index: 30;
+    margin-top: 0.5rem;
+    max-height: 65dvh;
+    overflow-y: auto;
+}
+
+@media (min-width: 1024px) {
+    .toolkitly-nav {
+        width: auto;
+    }
+
+    .toolkitly-nav:not(.hidden) {
+        display: flex;
+    }
+
+    .toolkitly-nav > details {
+        width: auto;
+    }
+
+    .toolkitly-nav > details > summary {
+        width: auto;
+    }
+
+    .toolkitly-menu-panel {
+        position: absolute;
+        top: auto;
+        right: 0;
+        left: auto;
+        width: var(--toolkitly-menu-width, 18rem);
+        margin-top: 0.5rem;
+        max-width: calc(100vw - 2rem);
+        max-height: min(42rem, calc(100dvh - 6rem));
+        overflow-y: auto;
+    }
+
+    .toolkitly-menu-panel[data-menu-size='narrow'] {
+        --toolkitly-menu-width: 16rem;
+    }
+
+    .toolkitly-menu-panel[data-menu-size='medium'] {
+        --toolkitly-menu-width: 18rem;
+    }
+
+    .toolkitly-menu-panel[data-menu-size='wide'] {
+        --toolkitly-menu-width: 44rem;
+    }
+
+    .toolkitly-menu-panel[data-menu-size='mega'] {
+        --toolkitly-menu-width: 58rem;
+    }
+}

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use RuntimeException;
 use setasign\Fpdi\Fpdi;
+use Symfony\Component\Process\Process;
 use Throwable;
 use ZipArchive;
 
@@ -53,6 +54,38 @@ class PdfToolService
                 'accept' => 'application/pdf,.pdf',
                 'max_files' => 1,
                 'defaults' => ['pages' => '1'],
+                'exports' => ['pdf'],
+            ],
+            'compress-pdf' => $base + [
+                'title' => 'Compress PDF',
+                'description' => 'Reduce PDF file size using server-side PDF compression.',
+                'accept' => 'application/pdf,.pdf',
+                'max_files' => 1,
+                'defaults' => ['quality' => 'ebook'],
+                'exports' => ['pdf'],
+            ],
+            'rotate-pdf' => $base + [
+                'title' => 'Rotate PDF',
+                'description' => 'Rotate every page in a PDF file.',
+                'accept' => 'application/pdf,.pdf',
+                'max_files' => 1,
+                'defaults' => ['angle' => 90],
+                'exports' => ['pdf'],
+            ],
+            'protect-pdf' => $base + [
+                'title' => 'Protect PDF',
+                'description' => 'Add password protection to a PDF file.',
+                'accept' => 'application/pdf,.pdf',
+                'max_files' => 1,
+                'defaults' => ['password' => ''],
+                'exports' => ['pdf'],
+            ],
+            'unlock-pdf' => $base + [
+                'title' => 'Unlock PDF',
+                'description' => 'Remove a known password from a PDF file.',
+                'accept' => 'application/pdf,.pdf',
+                'max_files' => 1,
+                'defaults' => ['password' => ''],
                 'exports' => ['pdf'],
             ],
             default => throw new RuntimeException('Unknown PDF tool.'),
@@ -182,6 +215,91 @@ class PdfToolService
         });
     }
 
+    /**
+     * @return array{id: string, filename: string, path: string, size: int, expires_at: string, mime: string}
+     */
+    public function compress(UploadedFile $file, string $quality = 'ebook'): array
+    {
+        $this->cleanupExpiredFiles();
+
+        return $this->storeResult('compress-pdf', 'toolkitly-compressed.pdf', 'application/pdf', function (string $path) use ($file, $quality): void {
+            $setting = in_array($quality, ['screen', 'ebook', 'printer', 'prepress'], true) ? $quality : 'ebook';
+            $this->runGhostscript([
+                '-sDEVICE=pdfwrite',
+                '-dCompatibilityLevel=1.4',
+                '-dPDFSETTINGS=/'.$setting,
+                '-dNOPAUSE',
+                '-dBATCH',
+                '-dQUIET',
+                '-sOutputFile='.$path,
+                $file->getRealPath(),
+            ]);
+        });
+    }
+
+    /**
+     * @return array{id: string, filename: string, path: string, size: int, expires_at: string, mime: string}
+     */
+    public function rotate(UploadedFile $file, int $angle = 90): array
+    {
+        $this->cleanupExpiredFiles();
+
+        return $this->storeResult('rotate-pdf', 'toolkitly-rotated.pdf', 'application/pdf', function (string $path) use ($file, $angle): void {
+            $images = new Imagick();
+            $images->setResolution(150, 150);
+            $images->readImage($file->getRealPath());
+
+            foreach ($images as $image) {
+                $image->rotateImage('white', in_array($angle, [90, 180, 270], true) ? $angle : 90);
+                $image->setImageFormat('pdf');
+            }
+
+            $images->writeImages($path, true);
+            $images->clear();
+        });
+    }
+
+    /**
+     * @return array{id: string, filename: string, path: string, size: int, expires_at: string, mime: string}
+     */
+    public function protect(UploadedFile $file, string $password): array
+    {
+        $this->cleanupExpiredFiles();
+
+        return $this->storeResult('protect-pdf', 'toolkitly-protected.pdf', 'application/pdf', function (string $path) use ($file, $password): void {
+            $this->runGhostscript([
+                '-sDEVICE=pdfwrite',
+                '-dNOPAUSE',
+                '-dBATCH',
+                '-dQUIET',
+                '-sOwnerPassword='.$password,
+                '-sUserPassword='.$password,
+                '-sOutputFile='.$path,
+                $file->getRealPath(),
+            ]);
+        });
+    }
+
+    /**
+     * @return array{id: string, filename: string, path: string, size: int, expires_at: string, mime: string}
+     */
+    public function unlock(UploadedFile $file, string $password): array
+    {
+        $this->cleanupExpiredFiles();
+
+        return $this->storeResult('unlock-pdf', 'toolkitly-unlocked.pdf', 'application/pdf', function (string $path) use ($file, $password): void {
+            $this->runGhostscript([
+                '-sDEVICE=pdfwrite',
+                '-dNOPAUSE',
+                '-dBATCH',
+                '-dQUIET',
+                '-sPDFPassword='.$password,
+                '-sOutputFile='.$path,
+                $file->getRealPath(),
+            ]);
+        });
+    }
+
     public function pathFor(string $tool, string $id, string $filename): string
     {
         return $this->storageDirectory($tool, $id).'/'.$filename;
@@ -275,6 +393,20 @@ class PdfToolService
         }
 
         return $zip;
+    }
+
+    /**
+     * @param  array<int, string>  $arguments
+     */
+    private function runGhostscript(array $arguments): void
+    {
+        $process = new Process(['gs', ...$arguments]);
+        $process->setTimeout(60);
+        $process->run();
+
+        if (! $process->isSuccessful()) {
+            throw new RuntimeException('Ghostscript could not process this PDF.');
+        }
     }
 
     private function baseDirectory(): string

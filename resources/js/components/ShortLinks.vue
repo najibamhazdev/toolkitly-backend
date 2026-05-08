@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onMounted, reactive, ref } from 'vue';
+import { recordToolEvent } from '../analytics';
 
 const props = defineProps({
     metadataUrl: {
@@ -71,6 +72,7 @@ async function createLink() {
 
         result.value = data.link;
         setStatus('Short link ready.');
+        recordToolEvent('short-links', 'generated', { format: 'url' });
     } catch (error) {
         setStatus(error.message || 'This short link could not be created.');
     } finally {
@@ -180,7 +182,7 @@ onMounted(loadMetadata);
                         {{ result.short_url }}
                     </a>
 
-                    <div class="mt-4 grid grid-cols-2 gap-3">
+                    <div class="mt-4 grid sm:grid-cols-2 gap-3">
                         <button type="button" class="rounded-lg bg-[#101820] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#26313b] focus:outline-none focus:ring-4 focus:ring-[#101820]/20" @click="copyLink">
                             Copy
                         </button>

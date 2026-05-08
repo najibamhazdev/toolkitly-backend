@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onMounted, reactive, ref } from 'vue';
+import { recordToolEvent } from '../analytics';
 
 const props = defineProps({
     metadataUrl: {
@@ -189,6 +190,7 @@ async function convertImages() {
 
     isConverting.value = false;
     setStatus('Converted images ready.');
+    recordToolEvent('image-converter', 'generated', { count: files.value.filter((entry) => entry.outputUrl).length, format: settings.format });
 }
 
 function downloadEntry(entry) {
@@ -296,7 +298,7 @@ onMounted(loadMetadata);
 
                 <div class="mt-5 rounded-lg border border-[#cdd8d2] bg-[#f8faf8] p-4">
                     <p class="text-sm font-semibold text-[#171411]">Popular conversions</p>
-                    <div class="mt-3 grid grid-cols-3 gap-2">
+                    <div class="mt-3 grid sm:grid-cols-3 gap-2">
                         <button
                             v-for="example in limits.examples"
                             :key="`${example.from}-${example.to}`"

@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onMounted, reactive, ref } from 'vue';
+import { recordToolEvent } from '../analytics';
 
 const props = defineProps({
     metadataUrl: {
@@ -205,6 +206,7 @@ async function compressImages() {
 
     isProcessing.value = false;
     setStatus('Compressed images ready.');
+    recordToolEvent('image-compressor', 'generated', { count: files.value.filter((entry) => entry.outputUrl).length, format: settings.format });
 }
 
 function downloadEntry(entry) {

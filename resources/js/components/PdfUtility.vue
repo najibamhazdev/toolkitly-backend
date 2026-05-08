@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onMounted, reactive, ref } from 'vue';
+import { recordToolEvent } from '../analytics';
 
 const props = defineProps({
     metadataUrl: {
@@ -24,6 +25,9 @@ const settings = reactive({
     pages: '1',
     resolution: 150,
     quality: 90,
+    compression: 'ebook',
+    angle: 90,
+    password: '',
 });
 const limits = ref({
     title: 'PDF Tool',
@@ -46,6 +50,10 @@ const actionLabel = computed(() => ({
     'pdf-to-jpg': 'Convert to JPG',
     'jpg-to-pdf': 'Create PDF',
     'remove-pdf-pages': 'Remove pages',
+    'compress-pdf': 'Compress PDF',
+    'rotate-pdf': 'Rotate PDF',
+    'protect-pdf': 'Protect PDF',
+    'unlock-pdf': 'Unlock PDF',
 })[props.toolKind] || 'Process file');
 
 function setStatus(message) {
@@ -138,6 +146,9 @@ async function loadMetadata() {
         settings.pages = data.defaults?.pages || settings.pages;
         settings.resolution = data.defaults?.resolution || settings.resolution;
         settings.quality = data.defaults?.quality || settings.quality;
+        settings.compression = data.defaults?.quality || settings.compression;
+        settings.angle = data.defaults?.angle || settings.angle;
+        settings.password = data.defaults?.password || settings.password;
     } catch {
         setStatus('Using local PDF settings.');
     }
@@ -170,6 +181,18 @@ async function processFiles() {
         formData.append('quality', settings.quality);
     }
 
+    if (props.toolKind === 'compress-pdf') {
+        formData.append('compression', settings.compression);
+    }
+
+    if (props.toolKind === 'rotate-pdf') {
+        formData.append('angle', settings.angle);
+    }
+
+    if (props.toolKind === 'protect-pdf' || props.toolKind === 'unlock-pdf') {
+        formData.append('password', settings.password);
+    }
+
     try {
         const response = await fetch(props.actionUrl, {
             method: 'POST',
@@ -185,6 +208,7 @@ async function processFiles() {
 
         result.value = data.file;
         setStatus('Result ready.');
+        recordToolEvent(props.toolKind, 'generated', { count: files.value.length, format: data.file?.extension || 'file' });
     } catch (error) {
         setStatus(error.message || 'This file could not be processed.');
     } finally {
@@ -264,6 +288,36 @@ onMounted(loadMetadata);
                     <label class="grid gap-2" for="jpg-quality">
                         <span class="text-sm font-medium text-[#2d2923]">JPG quality: {{ settings.quality }}%</span>
                         <input id="jpg-quality" v-model="settings.quality" type="range" min="40" max="100" step="1" class="accent-[#2f7c67]">
+                    </label>
+                </div>
+
+                <div v-if="toolKind === 'compress-pdf'" class="mb-4">
+                    <label class="grid gap-2" for="pdf-compression">
+                        <span class="text-sm font-medium text-[#2d2923]">Compression level</span>
+                        <select id="pdf-compression" v-model="settings.compression" class="h-11 rounded-lg border border-[#cdd8d2] bg-white px-3 text-sm text-[#171411] outline-none transition focus:border-[#2f7c67] focus:ring-4 focus:ring-[#2f7c67]/15">
+                            <option value="screen">Smallest</option>
+                            <option value="ebook">Balanced</option>
+                            <option value="printer">Print</option>
+                            <option value="prepress">High quality</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div v-if="toolKind === 'rotate-pdf'" class="mb-4">
+                    <label class="grid gap-2" for="pdf-angle">
+                        <span class="text-sm font-medium text-[#2d2923]">Rotation</span>
+                        <select id="pdf-angle" v-model="settings.angle" class="h-11 rounded-lg border border-[#cdd8d2] bg-white px-3 text-sm text-[#171411] outline-none transition focus:border-[#2f7c67] focus:ring-4 focus:ring-[#2f7c67]/15">
+                            <option :value="90">90 degrees</option>
+                            <option :value="180">180 degrees</option>
+                            <option :value="270">270 degrees</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div v-if="toolKind === 'protect-pdf' || toolKind === 'unlock-pdf'" class="mb-4">
+                    <label class="grid gap-2" for="pdf-password">
+                        <span class="text-sm font-medium text-[#2d2923]">Password</span>
+                        <input id="pdf-password" v-model="settings.password" type="password" class="h-11 rounded-lg border border-[#cdd8d2] bg-white px-3 text-sm text-[#171411] outline-none transition focus:border-[#2f7c67] focus:ring-4 focus:ring-[#2f7c67]/15">
                     </label>
                 </div>
 

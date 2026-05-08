@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
+import { recordToolEvent } from '../analytics';
 
 const props = defineProps({
     metadataUrl: {
@@ -134,6 +135,7 @@ async function mergePdf() {
 
         result.value = data.file;
         setStatus('Merged PDF ready.');
+        recordToolEvent('merge-pdf', 'generated', { count: files.value.length, format: 'pdf' });
     } catch (error) {
         setStatus(error.message || 'These PDFs could not be merged.');
     } finally {

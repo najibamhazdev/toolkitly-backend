@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
+import { recordToolEvent } from '../analytics';
 
 const props = defineProps({
     metadataUrl: {
@@ -188,6 +189,7 @@ async function generateFavicons() {
         icoUrl.value = URL.createObjectURL(await icoBlob(icoEntries));
         icoEntries.forEach((entry) => URL.revokeObjectURL(entry.url));
         setStatus('Favicons ready.');
+        recordToolEvent('favicon-generator', 'generated', { count: icons.value.length + 1, format: 'ico/png' });
     } catch (error) {
         setStatus(error.message || 'Favicons could not be generated.');
     } finally {

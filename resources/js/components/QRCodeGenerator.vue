@@ -1,6 +1,7 @@
 <script setup>
 import QRCode from 'qrcode';
 import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue';
+import { recordToolEvent } from '../analytics';
 
 const props = defineProps({
     metadataUrl: {
@@ -179,6 +180,7 @@ function downloadPng() {
 
     download(canvas.value.toDataURL('image/png'), 'png');
     setStatus('PNG downloaded.');
+    recordToolEvent('qr-code-generator', 'download', { format: 'png', type: form.type });
 }
 
 async function downloadSvg() {
@@ -197,6 +199,7 @@ async function downloadSvg() {
         download(url, 'svg');
         URL.revokeObjectURL(url);
         setStatus('SVG downloaded.');
+        recordToolEvent('qr-code-generator', 'download', { format: 'svg', type: form.type });
     } catch (error) {
         setStatus(error.message || 'The SVG could not be created.');
     }
@@ -224,6 +227,7 @@ async function copyImage() {
                 new ClipboardItem({ [blob.type]: blob }),
             ]);
             setStatus('QR image copied.');
+            recordToolEvent('qr-code-generator', 'copy', { format: 'png', type: form.type });
         } catch (error) {
             setStatus(error.message || 'The image could not be copied.');
         }
@@ -376,7 +380,7 @@ onMounted(async () => {
                         </select>
                     </label>
 
-                    <div class="grid grid-cols-2 gap-3">
+                    <div class="grid sm:grid-cols-2 gap-3">
                         <label class="grid gap-2" for="qr-dark">
                             <span class="text-sm font-medium text-[#2d2923]">Code</span>
                             <input id="qr-dark" v-model="style.dark" type="color" class="h-11 w-full rounded-lg border border-[#cdd8d2] bg-white p-1">
@@ -397,14 +401,14 @@ onMounted(async () => {
                     <canvas ref="canvas" class="max-h-full max-w-full"></canvas>
                 </div>
 
-                <div class="mt-4 grid grid-cols-2 gap-3">
+                <div class="mt-4 grid sm:grid-cols-2 gap-3">
                     <button type="button" class="rounded-lg bg-[#101820] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#26313b] focus:outline-none focus:ring-4 focus:ring-[#101820]/20" @click="downloadPng">
                         PNG
                     </button>
                     <button type="button" class="rounded-lg border border-[#c6d4cd] px-4 py-3 text-sm font-semibold text-[#171411] transition hover:border-[#6d8d80] hover:bg-[#f4f7f5] focus:outline-none focus:ring-4 focus:ring-[#101820]/10" @click="downloadSvg">
                         SVG
                     </button>
-                    <button type="button" class="col-span-2 rounded-lg border border-[#c6d4cd] px-4 py-3 text-sm font-semibold text-[#171411] transition hover:border-[#6d8d80] hover:bg-[#f4f7f5] focus:outline-none focus:ring-4 focus:ring-[#101820]/10" @click="copyImage">
+                    <button type="button" class="sm:col-span-2 rounded-lg border border-[#c6d4cd] px-4 py-3 text-sm font-semibold text-[#171411] transition hover:border-[#6d8d80] hover:bg-[#f4f7f5] focus:outline-none focus:ring-4 focus:ring-[#101820]/10" @click="copyImage">
                         Copy image
                     </button>
                 </div>
