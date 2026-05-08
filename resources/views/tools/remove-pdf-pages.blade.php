@@ -1,20 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Remove pages from a PDF online for free. Enter page numbers and download a cleaned PDF with ToolKitly.">
-        <link rel="canonical" href="{{ url('/pdf/remove-pdf-pages') }}">
-        <meta property="og:title" content="Remove PDF Pages | ToolKitly">
-        <meta property="og:description" content="Delete selected pages from a PDF file for free.">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="{{ url('/pdf/remove-pdf-pages') }}">
-
-        <title>Remove PDF Pages | ToolKitly</title>
-
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @include('partials.seo-head')
+        @include('partials.seo-head', [
+            'title' => 'Remove PDF Pages',
+            'description' => 'Remove pages from a PDF online for free. Enter page numbers and download a cleaned PDF with ToolKitly.',
+            'path' => '/pdf/remove-pdf-pages',
+        ])
         @include('partials.adsense-head')
         @include('partials.analytics-head')
     </head>

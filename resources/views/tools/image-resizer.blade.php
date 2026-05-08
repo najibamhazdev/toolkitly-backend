@@ -1,20 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Resize images online for Instagram, Facebook, LinkedIn, and custom sizes. Free browser-based image resizer by ToolKitly.">
-        <link rel="canonical" href="{{ url('/images/image-resizer') }}">
-        <meta property="og:title" content="Image Resizer | ToolKitly">
-        <meta property="og:description" content="Resize images for social media presets or custom dimensions.">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="{{ url('/images/image-resizer') }}">
-
-        <title>Image Resizer | ToolKitly</title>
-
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @include('partials.seo-head')
+        @include('partials.seo-head', [
+            'title' => 'Image Resizer',
+            'description' => 'Resize images online for Instagram, Facebook, LinkedIn, and custom sizes. Free browser-based image resizer by ToolKitly.',
+            'path' => '/images/image-resizer',
+        ])
         @include('partials.adsense-head')
         @include('partials.analytics-head')
     </head>

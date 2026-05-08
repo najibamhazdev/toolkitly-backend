@@ -30,6 +30,36 @@ class SeoAndAdsTest extends TestCase
             ->assertDontSee('/api/');
     }
 
+    public function test_homepage_has_single_structured_seo_head(): void
+    {
+        $html = $this->get('/')
+            ->assertOk()
+            ->assertSee('<meta property="og:title" content="Free Online Tools for PDFs, Images, Developers &amp; SEO | ToolKitly">', false)
+            ->assertSee('<meta name="twitter:card" content="summary_large_image">', false)
+            ->assertSee('"@context":"https://schema.org"', false)
+            ->assertSee('"@type":"WebSite"', false)
+            ->getContent();
+
+        $this->assertSame(1, substr_count($html, '<link rel="canonical"'));
+        $this->assertSame(1, substr_count($html, '<meta property="og:title"'));
+        $this->assertSame(1, substr_count($html, '<meta name="description"'));
+    }
+
+    public function test_tool_pages_do_not_duplicate_core_meta_tags(): void
+    {
+        $html = $this->get('/pdf/merge-pdf')
+            ->assertOk()
+            ->assertSee('<title>Merge PDF | ToolKitly</title>', false)
+            ->assertSee('<link rel="canonical" href="http://localhost/pdf/merge-pdf">', false)
+            ->assertSee('"@type":"WebApplication"', false)
+            ->getContent();
+
+        $this->assertSame(1, substr_count($html, '<title>'));
+        $this->assertSame(1, substr_count($html, '<link rel="canonical"'));
+        $this->assertSame(1, substr_count($html, '<meta property="og:title"'));
+        $this->assertSame(1, substr_count($html, '<meta name="description"'));
+    }
+
     public function test_adsense_is_disabled_until_configured(): void
     {
         $this->get('/json-formatter')

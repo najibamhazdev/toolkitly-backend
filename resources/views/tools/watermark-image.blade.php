@@ -1,18 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Add a text watermark to images online for free with ToolKitly.">
-        <link rel="canonical" href="{{ url('/images/watermark-image') }}">
-        <meta property="og:title" content="Watermark Image | ToolKitly">
-        <meta property="og:description" content="Watermark images locally in your browser.">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="{{ url('/images/watermark-image') }}">
-        <title>Watermark Image | ToolKitly</title>
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @include('partials.seo-head')
+        @include('partials.seo-head', [
+            'title' => 'Watermark Image',
+            'description' => 'Add a text watermark to images online for free with ToolKitly.',
+            'path' => '/images/watermark-image',
+        ])
         @include('partials.adsense-head')
         @include('partials.analytics-head')
     </head>

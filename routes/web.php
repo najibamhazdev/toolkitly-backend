@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\MergePdfController;
 use App\Http\Controllers\Api\PdfToolController;
 use App\Http\Controllers\ShortLinkRedirectController;
 use App\Http\Controllers\ToolAnalyticsController;
+use App\Http\Controllers\ToolSettingsController;
 use Illuminate\Support\Facades\Route;
 
 $homepageTools = [
@@ -195,3 +196,5 @@ Route::redirect('/favicon-generator', '/images/favicon-generator', 301);
 
 Route::get('/s/{code}', ShortLinkRedirectController::class)->name('short-links.redirect');
 Route::get('/toolkitly/analytics', ToolAnalyticsController::class)->name('analytics.tool-events');
+Route::get('/toolkitly/settings', [ToolSettingsController::class, 'edit'])->name('admin.settings');
+Route::put('/toolkitly/settings', [ToolSettingsController::class, 'update'])->name('admin.settings.update');

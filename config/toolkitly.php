@@ -7,11 +7,15 @@ return [
         'client' => env('GOOGLE_ADSENSE_CLIENT'),
         'slots' => [
             'top' => env('GOOGLE_ADSENSE_SLOT_TOP'),
+            'middle' => env('GOOGLE_ADSENSE_SLOT_MIDDLE'),
             'bottom' => env('GOOGLE_ADSENSE_SLOT_BOTTOM'),
         ],
     ],
     'analytics' => [
         'google_measurement_id' => env('GOOGLE_ANALYTICS_MEASUREMENT_ID'),
         'dashboard_token' => env('TOOLKITLY_ANALYTICS_TOKEN'),
+    ],
+    'admin' => [
+        'settings_token' => env('TOOLKITLY_SETTINGS_TOKEN'),
     ],
 ];

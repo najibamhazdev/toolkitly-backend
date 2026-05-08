@@ -1,23 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="ToolKitly is a free online digital toolbox with PDF, image, developer, SEO, design, URL, and calculator tools.">
-        <link rel="canonical" href="{{ url('/') }}">
-        <meta property="og:title" content="ToolKitly | Free Online Tools">
-        <meta property="og:description" content="Generate, convert, optimize, and simplify with 35+ free tools for PDFs, images, developers, SEO, and more.">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="{{ url('/') }}">
-
-        <title>ToolKitly | Free Online Tools for PDFs, Images, Developers, SEO and More</title>
-
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @include('partials.seo-head', [
-            'title' => 'ToolKitly',
-            'description' => 'Free online tools for PDFs, images, developers, SEO, URLs, and everyday tasks.',
+            'title' => 'Free Online Tools for PDFs, Images, Developers & SEO',
+            'description' => 'Use 35+ free online tools to generate QR codes, merge PDFs, compress images, format JSON, build UTM links, create SEO tags, and simplify everyday digital tasks.',
             'path' => '/',
+            'schemaType' => 'WebSite',
         ])
         @include('partials.adsense-head')
         @include('partials.analytics-head')
@@ -74,6 +64,8 @@
                         @endforeach
                     </div>
                 </section>
+
+                @include('partials.ad-slot', ['slot' => 'middle'])
 
                 <section class="bg-white py-10">
                     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

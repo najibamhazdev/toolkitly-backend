@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Services\Pdf\PdfToolService;
+use App\Support\PlatformSettings;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -26,7 +27,7 @@ class PdfToolController extends Controller
     {
         abort_unless($this->isSupportedTool($tool), 404);
 
-        $maxUploadKb = (int) config('toolkitly.max_upload_kb', 10240);
+        $maxUploadKb = (int) PlatformSettings::get('max_upload_kb', config('toolkitly.max_upload_kb', 10240));
 
         $data = match ($tool) {
             'split-pdf', 'pdf-to-jpg', 'remove-pdf-pages', 'compress-pdf', 'rotate-pdf', 'protect-pdf', 'unlock-pdf' => $request->validate([

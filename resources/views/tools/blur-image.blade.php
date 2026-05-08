@@ -1,18 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Blur images online for free in your browser with ToolKitly.">
-        <link rel="canonical" href="{{ url('/images/blur-image') }}">
-        <meta property="og:title" content="Blur Image | ToolKitly">
-        <meta property="og:description" content="Apply blur to images locally in your browser.">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="{{ url('/images/blur-image') }}">
-        <title>Blur Image | ToolKitly</title>
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @include('partials.seo-head')
+        @include('partials.seo-head', [
+            'title' => 'Blur Image',
+            'description' => 'Blur images online for free in your browser with ToolKitly.',
+            'path' => '/images/blur-image',
+        ])
         @include('partials.adsense-head')
         @include('partials.analytics-head')
     </head>

@@ -2,6 +2,8 @@
 
 namespace App\Services\Image;
 
+use App\Support\PlatformSettings;
+
 class ImageToolService
 {
     /**
@@ -23,7 +25,7 @@ class ImageToolService
     {
         return [
             'max_files' => 20,
-            'max_upload_kb' => (int) config('toolkitly.max_upload_kb', 10240),
+            'max_upload_kb' => (int) PlatformSettings::get('max_upload_kb', config('toolkitly.max_upload_kb', 10240)),
             'formats' => $this->outputFormats(),
             'defaults' => [
                 'quality' => 72,
@@ -40,7 +42,7 @@ class ImageToolService
     {
         return [
             'max_files' => 20,
-            'max_upload_kb' => (int) config('toolkitly.max_upload_kb', 10240),
+            'max_upload_kb' => (int) PlatformSettings::get('max_upload_kb', config('toolkitly.max_upload_kb', 10240)),
             'formats' => $this->outputFormats(),
             'defaults' => [
                 'format' => 'webp',
@@ -60,7 +62,7 @@ class ImageToolService
     public function faviconMetadata(): array
     {
         return [
-            'max_upload_kb' => (int) config('toolkitly.max_upload_kb', 10240),
+            'max_upload_kb' => (int) PlatformSettings::get('max_upload_kb', config('toolkitly.max_upload_kb', 10240)),
             'sizes' => [
                 ['size' => 16, 'filename' => 'favicon-16x16.png'],
                 ['size' => 32, 'filename' => 'favicon-32x32.png'],
@@ -78,7 +80,7 @@ class ImageToolService
     public function resizerMetadata(): array
     {
         return [
-            'max_upload_kb' => (int) config('toolkitly.max_upload_kb', 10240),
+            'max_upload_kb' => (int) PlatformSettings::get('max_upload_kb', config('toolkitly.max_upload_kb', 10240)),
             'formats' => $this->outputFormats(),
             'defaults' => [
                 'format' => 'jpeg',

@@ -3,6 +3,7 @@
 namespace App\Services\Pdf;
 
 use FPDF;
+use App\Support\PlatformSettings;
 use Imagick;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
@@ -21,7 +22,7 @@ class PdfToolService
     public function metadata(string $tool): array
     {
         $base = [
-            'max_upload_kb' => (int) config('toolkitly.max_upload_kb', 10240),
+            'max_upload_kb' => (int) PlatformSettings::get('max_upload_kb', config('toolkitly.max_upload_kb', 10240)),
             'expires_after_seconds' => $this->ttl(),
         ];
 
@@ -421,6 +422,6 @@ class PdfToolService
 
     private function ttl(): int
     {
-        return (int) config('toolkitly.temporary_file_ttl', 3600);
+        return (int) PlatformSettings::get('temporary_file_ttl', config('toolkitly.temporary_file_ttl', 3600));
     }
 }

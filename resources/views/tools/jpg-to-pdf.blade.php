@@ -1,20 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Convert JPG images to one PDF online for free with ToolKitly.">
-        <link rel="canonical" href="{{ url('/pdf/jpg-to-pdf') }}">
-        <meta property="og:title" content="JPG to PDF | ToolKitly">
-        <meta property="og:description" content="Combine JPG images into one PDF file for free.">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="{{ url('/pdf/jpg-to-pdf') }}">
-
-        <title>JPG to PDF | ToolKitly</title>
-
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @include('partials.seo-head')
+        @include('partials.seo-head', [
+            'title' => 'JPG to PDF',
+            'description' => 'Convert JPG images to one PDF online for free with ToolKitly.',
+            'path' => '/pdf/jpg-to-pdf',
+        ])
         @include('partials.adsense-head')
         @include('partials.analytics-head')
     </head>

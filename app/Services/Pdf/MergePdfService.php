@@ -2,6 +2,7 @@
 
 namespace App\Services\Pdf;
 
+use App\Support\PlatformSettings;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -97,6 +98,6 @@ class MergePdfService
 
     private function ttl(): int
     {
-        return (int) config('toolkitly.temporary_file_ttl', 3600);
+        return (int) PlatformSettings::get('temporary_file_ttl', config('toolkitly.temporary_file_ttl', 3600));
     }
 }

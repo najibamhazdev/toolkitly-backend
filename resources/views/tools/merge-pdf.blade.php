@@ -1,20 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Merge PDF files online for free. Upload PDFs, arrange their order, and download one combined PDF with ToolKitly.">
-        <link rel="canonical" href="{{ url('/pdf/merge-pdf') }}">
-        <meta property="og:title" content="Merge PDF | ToolKitly">
-        <meta property="og:description" content="Combine multiple PDFs into one free online PDF file.">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="{{ url('/pdf/merge-pdf') }}">
-
-        <title>Merge PDF | ToolKitly</title>
-
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @include('partials.seo-head')
+        @include('partials.seo-head', [
+            'title' => 'Merge PDF',
+            'description' => 'Merge PDF files online for free. Upload PDFs, arrange their order, and download one combined PDF with ToolKitly.',
+            'path' => '/pdf/merge-pdf',
+        ])
         @include('partials.adsense-head')
         @include('partials.analytics-head')
     </head>

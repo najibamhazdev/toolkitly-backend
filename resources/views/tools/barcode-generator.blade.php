@@ -1,20 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Create free Code 128, EAN-13, and UPC-A barcodes. Export PNG or SVG instantly with ToolKitly.">
-        <link rel="canonical" href="{{ url('/barcode-generator') }}">
-        <meta property="og:title" content="Barcode Generator | ToolKitly">
-        <meta property="og:description" content="Generate free barcodes in your browser and export PNG or SVG.">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="{{ url('/barcode-generator') }}">
-
-        <title>Barcode Generator | ToolKitly</title>
-
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @include('partials.seo-head')
+        @include('partials.seo-head', [
+            'title' => 'Barcode Generator',
+            'description' => 'Create free Code 128, EAN-13, and UPC-A barcodes. Export PNG or SVG instantly with ToolKitly.',
+            'path' => '/barcode-generator',
+        ])
         @include('partials.adsense-head')
         @include('partials.analytics-head')
     </head>

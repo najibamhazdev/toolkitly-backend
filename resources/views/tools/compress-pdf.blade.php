@@ -1,18 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Compress PDF files online for free with ToolKitly.">
-        <link rel="canonical" href="{{ url('/pdf/compress-pdf') }}">
-        <meta property="og:title" content="Compress PDF | ToolKitly">
-        <meta property="og:description" content="Reduce PDF file size online for free.">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="{{ url('/pdf/compress-pdf') }}">
-        <title>Compress PDF | ToolKitly</title>
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @include('partials.seo-head')
+        @include('partials.seo-head', [
+            'title' => 'Compress PDF',
+            'description' => 'Compress PDF files online for free with ToolKitly.',
+            'path' => '/pdf/compress-pdf',
+        ])
         @include('partials.adsense-head')
         @include('partials.analytics-head')
     </head>

@@ -1,20 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Generate favicon.ico, app icons, and browser icon PNG sizes online for free with ToolKitly.">
-        <link rel="canonical" href="{{ url('/images/favicon-generator') }}">
-        <meta property="og:title" content="Favicon Generator | ToolKitly">
-        <meta property="og:description" content="Create favicon.ico and app icon PNG files from one image.">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="{{ url('/images/favicon-generator') }}">
-
-        <title>Favicon Generator | ToolKitly</title>
-
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @include('partials.seo-head')
+        @include('partials.seo-head', [
+            'title' => 'Favicon Generator',
+            'description' => 'Generate favicon.ico, app icons, and browser icon PNG sizes online for free with ToolKitly.',
+            'path' => '/images/favicon-generator',
+        ])
         @include('partials.adsense-head')
         @include('partials.analytics-head')
     </head>

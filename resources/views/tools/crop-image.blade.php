@@ -1,20 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Crop images online for free in your browser. Upload an image, set crop dimensions, and download the result.">
-        <link rel="canonical" href="{{ url('/images/crop-image') }}">
-        <meta property="og:title" content="Crop Image | ToolKitly">
-        <meta property="og:description" content="Crop images locally in your browser and download PNG or JPG.">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="{{ url('/images/crop-image') }}">
-
-        <title>Crop Image | ToolKitly</title>
-
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @include('partials.seo-head')
+        @include('partials.seo-head', [
+            'title' => 'Crop Image',
+            'description' => 'Crop images online for free in your browser. Upload an image, set crop dimensions, and download the result.',
+            'path' => '/images/crop-image',
+        ])
         @include('partials.adsense-head')
         @include('partials.analytics-head')
     </head>

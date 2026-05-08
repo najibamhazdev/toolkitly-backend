@@ -1,20 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Convert JPG, PNG, and WebP images online for free. Change image formats in your browser with ToolKitly.">
-        <link rel="canonical" href="{{ url('/images/image-converter') }}">
-        <meta property="og:title" content="Image Converter | ToolKitly">
-        <meta property="og:description" content="Convert JPG to PNG, PNG to WebP, and WebP to JPG for free.">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="{{ url('/images/image-converter') }}">
-
-        <title>Image Converter | ToolKitly</title>
-
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @include('partials.seo-head')
+        @include('partials.seo-head', [
+            'title' => 'Image Converter',
+            'description' => 'Convert JPG, PNG, and WebP images online for free. Change image formats in your browser with ToolKitly.',
+            'path' => '/images/image-converter',
+        ])
         @include('partials.adsense-head')
         @include('partials.analytics-head')
     </head>

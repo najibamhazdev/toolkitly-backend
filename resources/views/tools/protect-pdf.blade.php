@@ -1,18 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Protect PDF files with a password online using ToolKitly.">
-        <link rel="canonical" href="{{ url('/pdf/protect-pdf') }}">
-        <meta property="og:title" content="Protect PDF | ToolKitly">
-        <meta property="og:description" content="Add password protection to a PDF file.">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="{{ url('/pdf/protect-pdf') }}">
-        <title>Protect PDF | ToolKitly</title>
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @include('partials.seo-head')
+        @include('partials.seo-head', [
+            'title' => 'Protect PDF',
+            'description' => 'Protect PDF files with a password online using ToolKitly.',
+            'path' => '/pdf/protect-pdf',
+        ])
         @include('partials.adsense-head')
         @include('partials.analytics-head')
     </head>

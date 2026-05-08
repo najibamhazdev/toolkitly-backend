@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Services\Pdf\MergePdfService;
+use App\Support\PlatformSettings;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -20,15 +21,15 @@ class MergePdfController extends Controller
         return response()->json([
             'min_files' => 2,
             'max_files' => 20,
-            'max_upload_kb' => (int) config('toolkitly.max_upload_kb', 10240),
-            'expires_after_seconds' => (int) config('toolkitly.temporary_file_ttl', 3600),
+            'max_upload_kb' => (int) PlatformSettings::get('max_upload_kb', config('toolkitly.max_upload_kb', 10240)),
+            'expires_after_seconds' => (int) PlatformSettings::get('temporary_file_ttl', config('toolkitly.temporary_file_ttl', 3600)),
             'exports' => ['pdf'],
         ]);
     }
 
     public function merge(Request $request): JsonResponse
     {
-        $maxUploadKb = (int) config('toolkitly.max_upload_kb', 10240);
+        $maxUploadKb = (int) PlatformSettings::get('max_upload_kb', config('toolkitly.max_upload_kb', 10240));
 
         $data = $request->validate([
             'files' => ['required', 'array', 'min:2', 'max:20'],
