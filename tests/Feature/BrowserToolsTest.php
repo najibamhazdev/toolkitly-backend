@@ -62,6 +62,16 @@ class BrowserToolsTest extends TestCase
         $this->get('/social-media-resizer')->assertRedirect('/images/image-resizer');
     }
 
+    public function test_browser_tools_show_related_internal_links(): void
+    {
+        $this->get('/json-formatter')
+            ->assertOk()
+            ->assertSee('Related tools')
+            ->assertSee('/base64-tool', false)
+            ->assertSee('/jwt-decoder', false)
+            ->assertSee('/uuid-generator', false);
+    }
+
     public function test_crop_image_page_loads(): void
     {
         $this->get('/images/crop-image')

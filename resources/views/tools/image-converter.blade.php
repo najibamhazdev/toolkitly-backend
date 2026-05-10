@@ -21,6 +21,7 @@
                 data-tool="image-converter"
                 data-metadata-url="{{ url('/api/tools/images/image-converter') }}"
             ></div>
+            @include('partials.related-tools')
             @include('partials.ad-slot', ['slot' => 'bottom'])
             @include('partials.footer')
         </div>

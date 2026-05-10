@@ -16,6 +16,7 @@
             @include('partials.navigation')
             @include('partials.ad-slot', ['slot' => 'top'])
             <div id="app" data-tool="pdf-utility" data-tool-kind="compress-pdf" data-metadata-url="{{ url('/api/tools/pdf/compress-pdf') }}" data-action-url="{{ url('/api/tools/pdf/compress-pdf/process') }}"></div>
+            @include('partials.related-tools')
             @include('partials.ad-slot', ['slot' => 'bottom'])
             @include('partials.footer')
         </div>

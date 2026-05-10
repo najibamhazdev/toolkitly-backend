@@ -20,7 +20,11 @@ class MergePdfTest extends TestCase
         $this->get('/pdf/merge-pdf')
             ->assertOk()
             ->assertSee('Merge PDF')
-            ->assertSee('/api/tools/pdf/merge-pdf', false);
+            ->assertSee('/api/tools/pdf/merge-pdf', false)
+            ->assertSee('Related tools')
+            ->assertSee('/pdf/split-pdf', false)
+            ->assertSee('/pdf/remove-pdf-pages', false)
+            ->assertSee('/pdf/jpg-to-pdf', false);
     }
 
     public function test_old_merge_pdf_page_redirects_to_grouped_url(): void

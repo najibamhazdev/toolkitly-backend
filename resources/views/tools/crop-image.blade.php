@@ -17,6 +17,7 @@
             @include('partials.ad-slot', ['slot' => 'top'])
 
             <div id="app" data-tool="crop-image"></div>
+            @include('partials.related-tools')
             @include('partials.ad-slot', ['slot' => 'bottom'])
             @include('partials.footer')
         </div>

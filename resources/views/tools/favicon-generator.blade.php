@@ -21,6 +21,7 @@
                 data-tool="favicon-generator"
                 data-metadata-url="{{ url('/api/tools/images/favicon-generator') }}"
             ></div>
+            @include('partials.related-tools')
             @include('partials.ad-slot', ['slot' => 'bottom'])
             @include('partials.footer')
         </div>

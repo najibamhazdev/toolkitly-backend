@@ -16,6 +16,7 @@
             @include('partials.navigation')
             @include('partials.ad-slot', ['slot' => 'top'])
             <div id="app" data-tool="image-effect" data-tool-kind="watermark-image" data-title="Watermark Image" data-description="Add a text watermark to images locally in your browser."></div>
+            @include('partials.related-tools')
             @include('partials.ad-slot', ['slot' => 'bottom'])
             @include('partials.footer')
         </div>

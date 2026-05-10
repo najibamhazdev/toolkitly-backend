@@ -22,6 +22,7 @@
                 data-metadata-url="{{ url('/api/tools/barcode-generator') }}"
                 data-payload-url="{{ url('/api/tools/barcode-generator/payload') }}"
             ></div>
+            @include('partials.related-tools')
             @include('partials.ad-slot', ['slot' => 'bottom'])
             @include('partials.footer')
         </div>

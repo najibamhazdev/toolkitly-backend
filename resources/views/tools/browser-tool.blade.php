@@ -26,6 +26,7 @@
                     data-action-url="{{ url($actionUrl) }}"
                 @endisset
             ></div>
+            @include('partials.related-tools')
             @include('partials.ad-slot', ['slot' => 'bottom'])
             @include('partials.footer')
         </div>

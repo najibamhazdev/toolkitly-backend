@@ -22,6 +22,7 @@
                 data-metadata-url="{{ url('/api/tools/pdf/merge-pdf') }}"
                 data-merge-url="{{ url('/api/tools/pdf/merge-pdf/merge') }}"
             ></div>
+            @include('partials.related-tools')
             @include('partials.ad-slot', ['slot' => 'bottom'])
             @include('partials.footer')
         </div>

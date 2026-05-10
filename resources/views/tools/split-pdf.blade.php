@@ -23,6 +23,7 @@
                 data-metadata-url="{{ url('/api/tools/pdf/split-pdf') }}"
                 data-action-url="{{ url('/api/tools/pdf/split-pdf/process') }}"
             ></div>
+            @include('partials.related-tools')
             @include('partials.ad-slot', ['slot' => 'bottom'])
             @include('partials.footer')
         </div>

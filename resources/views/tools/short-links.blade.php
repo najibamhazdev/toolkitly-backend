@@ -22,6 +22,7 @@
                 data-metadata-url="{{ url('/api/tools/short-links') }}"
                 data-create-url="{{ url('/api/tools/short-links') }}"
             ></div>
+            @include('partials.related-tools')
             @include('partials.ad-slot', ['slot' => 'bottom'])
             @include('partials.footer')
         </div>

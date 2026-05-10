@@ -16,6 +16,16 @@ class SeoAndAdsTest extends TestCase
             ->assertSee('Sitemap: http://localhost/sitemap.xml');
     }
 
+    public function test_public_robots_file_is_search_engine_ready(): void
+    {
+        $robots = file_get_contents(public_path('robots.txt'));
+
+        $this->assertStringContainsString('User-agent: *', $robots);
+        $this->assertStringContainsString('Allow: /', $robots);
+        $this->assertStringContainsString('Sitemap: https://toolkitly.net/sitemap.xml', $robots);
+        $this->assertStringNotContainsString('Disallow:', $robots);
+    }
+
     public function test_sitemap_lists_canonical_tool_pages(): void
     {
         $this->get('/sitemap.xml')

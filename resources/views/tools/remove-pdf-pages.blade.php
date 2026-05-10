@@ -23,6 +23,7 @@
                 data-metadata-url="{{ url('/api/tools/pdf/remove-pdf-pages') }}"
                 data-action-url="{{ url('/api/tools/pdf/remove-pdf-pages/process') }}"
             ></div>
+            @include('partials.related-tools')
             @include('partials.ad-slot', ['slot' => 'bottom'])
             @include('partials.footer')
         </div>

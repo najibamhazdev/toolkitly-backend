@@ -23,6 +23,7 @@
                 data-payload-url="{{ url('/api/tools/qr-code-generator/payload') }}"
                 data-initial-url="{{ url('/qr-code-generator') }}"
             ></div>
+            @include('partials.related-tools')
             @include('partials.ad-slot', ['slot' => 'bottom'])
             @include('partials.footer')
         </div>
